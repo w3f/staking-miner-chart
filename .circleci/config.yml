@@ -1,0 +1,84 @@
+version: 2
+
+jobs:
+  helmLint:
+    docker:
+      - image: web3f/ci-commons:v3.1.6
+    steps:
+      - checkout
+      - run:
+          command: |
+            helm lint ./charts/staking-miner
+
+  buildImage:
+    docker:
+      - image: web3f/ci-commons:v3.1.6
+    resource_class: xlarge
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          command: |
+            git clone https://github.com/paritytech/polkadot.git &&
+            cd polkadot/ &&
+            docker build -t w3f/staking-miner -f scripts/ci/dockerfiles/staking-miner/staking-miner_builder.Dockerfile .
+
+  publishImage:
+    docker:
+      - image: web3f/ci-commons:v3.1.6
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          command: |
+            /scripts/publish-image.sh web3f/staking-miner
+
+  publishChart:
+    docker:
+      - image: web3f/ci-commons:v3.1.6
+    steps:
+      - checkout
+      - run:
+          command: |
+            /scripts/publish-chart.sh
+
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - helmLint:
+          filters:
+            tags:
+              only: /.*/
+      - buildImage:
+          context: dockerhub-bot
+          filters:
+            tags:
+              only: /.*/
+          requires:
+            - unitTests
+      - integrationTests:
+          filters:
+            tags:
+              only: /.*/
+          requires:
+            - helmLint
+            - buildImage
+      - publishImage:
+          context: dockerhub-bot
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+          requires:
+            - integrationTests
+      - publishChart:
+          context: github-bot
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+          requires:
+            - integrationTests
