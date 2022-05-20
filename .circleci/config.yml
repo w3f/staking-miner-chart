@@ -22,7 +22,7 @@ jobs:
           command: |
             git clone https://github.com/paritytech/polkadot.git &&
             cd polkadot/ &&
-            docker build -t w3f/staking-miner -f scripts/ci/dockerfiles/staking-miner/staking-miner_builder.Dockerfile .
+            docker build -t w3f/staking-miner -f /root/project/scripts/staking-miner.Dockerfile .
 
   publishImage:
     docker:
