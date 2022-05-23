@@ -26,8 +26,7 @@ LABEL io.parity.image.authors="devops@web3.foundation" \
 ARG PROFILE=release
 COPY --from=builder /app/target/$PROFILE/staking-miner /usr/local/bin
 
-RUN useradd -u 1000 -U -s /bin/bash miner && \
-	rm -rf /usr/bin /usr/sbin
+RUN useradd -u 1000 -U -s /bin/bash miner
 
 # show backtraces
 ENV RUST_BACKTRACE 1
