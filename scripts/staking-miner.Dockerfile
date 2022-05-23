@@ -1,19 +1,16 @@
-FROM lukemathwalker/cargo-chef:latest-rust-latest AS chef
+FROM paritytech/ci-linux:production as builder
+
+# metadata
+ARG VCS_REF
+ARG BUILD_DATE
+ARG IMAGE_NAME="staking-miner"
+ARG PROFILE=release
+
+LABEL description="This is the build stage. Here we create the binary."
+
 WORKDIR /app
-
-FROM chef AS planner
-COPY . .
-RUN cargo chef prepare --recipe-path recipe.json
-
-FROM chef AS builder
-COPY --from=planner /app/recipe.json recipe.json
-# Build dependencies - this is the caching Docker layer!
-RUN apt-get update && apt-get install -y \
-	build-essential lld pkg-config openssl libssl-dev gcc g++ clang make autoconf
-RUN cargo chef cook --release --recipe-path recipe.json
-# Build application
-COPY . .
-RUN cargo build --release --bin --package staking-miner
+COPY . /app
+RUN cargo build --locked --$PROFILE --package staking-miner
 
 # ===== SECOND STAGE ======
 

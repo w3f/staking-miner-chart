@@ -23,7 +23,10 @@ jobs:
           command: |
             git clone https://github.com/paritytech/polkadot.git &&
             cd polkadot/ &&
-            docker build -t web3f/staking-miner -f /root/project/scripts/staking-miner.Dockerfile .
+            docker build -t web3f/staking-miner -f /root/project/scripts/staking-miner.Dockerfile . &&
+            docker login -u ${DOCKER_USER} -p "${DOCKER_PASSWORD}" ${DOCKER_REGISTRY} &&
+            docker tag ${IMAGE}:${CIRCLE_SHA1} ${IMAGE}:latest &&
+            docker push ${IMAGE}:latest
 
   publishImage:
     docker:
