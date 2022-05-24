@@ -25,7 +25,6 @@ jobs:
             cd polkadot/ &&
             docker build -t web3f/staking-miner -f /root/project/scripts/staking-miner.Dockerfile . &&
             docker login -u ${DOCKER_USER} -p "${DOCKER_PASSWORD}" ${DOCKER_REGISTRY} &&
-            docker tag web3f/staking-miner:${CIRCLE_SHA1} web3f/staking-miner:latest &&
             docker push web3f/staking-miner:latest
 
   publishImage:
