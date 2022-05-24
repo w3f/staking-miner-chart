@@ -16,13 +16,16 @@ jobs:
     resource_class: xlarge
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           no_output_timeout: 30m
           command: |
             git clone https://github.com/paritytech/polkadot.git &&
             cd polkadot/ &&
-            docker build -t web3f/staking-miner -f /root/project/scripts/staking-miner.Dockerfile .
+            docker build -t web3f/staking-miner -f /root/project/scripts/staking-miner.Dockerfile . &&
+            docker login -u ${DOCKER_USER} -p "${DOCKER_PASSWORD}" ${DOCKER_REGISTRY} &&
+            docker push web3f/staking-miner:latest
 
   publishImage:
     docker:
