@@ -1,5 +1,5 @@
 image:
-  repo: w3f/staking-miner
+  repo: web3f/staking-miner
 
 args: ["dry-run"]
 seed: 0x0
