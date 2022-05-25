@@ -26,6 +26,7 @@ LABEL io.parity.image.authors="devops@web3.foundation" \
 ARG PROFILE=release
 COPY --from=builder /app/target/$PROFILE/staking-miner /usr/local/bin
 
+RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
 RUN useradd -u 1000 -U -s /bin/bash miner
 
 # show backtraces
