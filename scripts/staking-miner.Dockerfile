@@ -1,19 +1,3 @@
-FROM paritytech/ci-linux:production as builder
-
-# metadata
-ARG VCS_REF
-ARG BUILD_DATE
-ARG IMAGE_NAME="staking-miner"
-ARG PROFILE=release
-
-LABEL description="This is the build stage. Here we create the binary."
-
-WORKDIR /app
-COPY . /app
-RUN cargo build --locked --$PROFILE --package staking-miner
-
-# ===== SECOND STAGE ======
-
 FROM docker.io/library/ubuntu:20.04
 LABEL description="This is the 2nd stage: a very small image where we copy the binary."
 LABEL io.parity.image.authors="devops@web3.foundation" \
@@ -23,10 +7,14 @@ LABEL io.parity.image.authors="devops@web3.foundation" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}"
 
-ARG PROFILE=release
-COPY --from=builder /app/target/$PROFILE/staking-miner /usr/local/bin
+ENV POLKADOT_VERSION = "v0.9.22"
 
-RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+RUN apt-get update && \
+    apt-get install -y ca-certificates wget && \
+	update-ca-certificates
+RUN wget https://github.com/paritytech/polkadot/releases/download/$POLKADOT_VERSION/staking-miner -o /usr/local/bin/staking-miner && \
+    chmod +x /usr/local/bin/staking-miner
+
 RUN useradd -u 1000 -U -s /bin/bash miner
 
 # show backtraces
