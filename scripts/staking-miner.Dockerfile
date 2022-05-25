@@ -12,7 +12,7 @@ ARG POLKADOT_VERSION="v0.9.22"
 RUN apt-get update && \
     apt-get install -y ca-certificates wget && \
 	update-ca-certificates
-RUN wget https://github.com/paritytech/polkadot/releases/download/${POLKADOT_VERSION}/staking-miner -o /usr/local/bin/staking-miner && \
+RUN wget https://github.com/paritytech/polkadot/releases/download/${POLKADOT_VERSION}/staking-miner -O /usr/local/bin/staking-miner && \
     chmod +x /usr/local/bin/staking-miner
 
 RUN useradd -u 1000 -U -s /bin/bash miner
