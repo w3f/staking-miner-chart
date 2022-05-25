@@ -1,5 +1,6 @@
 image:
   repo: w3f/staking-miner
 
+args: ["dry-run"]
 seed: 0x0
 wss_endpoint: wss://your-node:9944
