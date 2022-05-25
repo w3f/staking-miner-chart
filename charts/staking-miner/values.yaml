@@ -1,6 +1,6 @@
 image:
   repo: web3f/staking-miner
 
-args: ["dry-run","phrag-mms"]
+arguments: ["dry-run","phrag-mms"]
 seed: 0x0
 wss_endpoint: wss://your-node:9944
