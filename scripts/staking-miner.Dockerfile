@@ -7,7 +7,7 @@ LABEL io.parity.image.authors="devops@web3.foundation" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}"
 
-ARG POLKADOT_VERSION="v0.9.23"
+ARG POLKADOT_VERSION="v0.9.25"
 
 RUN apt-get update && \
     apt-get install -y ca-certificates wget && \
