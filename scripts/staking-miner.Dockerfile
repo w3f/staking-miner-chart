@@ -1,4 +1,4 @@
-FROM docker.io/library/ubuntu:20.10
+FROM docker.io/library/ubuntu:20.04
 LABEL description="This is the 2nd stage: a very small image where we copy the binary."
 LABEL io.parity.image.authors="devops@web3.foundation" \
 	io.parity.image.vendor="Web 3.0 Technologies Foundation" \
