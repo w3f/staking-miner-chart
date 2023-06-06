@@ -3,7 +3,7 @@ version: 2
 jobs:
   helmLint:
     docker:
-      - image: web3f/ci-commons:v3.1.6
+      - image: web3f/ci-commons:v3.2.3
     steps:
       - checkout
       - run:
@@ -12,7 +12,7 @@ jobs:
 
   buildImage:
     docker:
-      - image: web3f/ci-commons:v3.1.6
+      - image: web3f/ci-commons:v3.2.3
     resource_class: xlarge
     steps:
       - checkout
@@ -28,7 +28,7 @@ jobs:
 
   publishImage:
     docker:
-      - image: web3f/ci-commons:v3.1.6
+      - image: web3f/ci-commons:v3.2.3
     steps:
       - checkout
       - setup_remote_docker
@@ -38,7 +38,7 @@ jobs:
 
   publishChart:
     docker:
-      - image: web3f/ci-commons:v3.1.6
+      - image: web3f/ci-commons:v3.2.3
     steps:
       - checkout
       - run:
